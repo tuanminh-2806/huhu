@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vocabulary Quiz</title>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    max-width:900px;
+    margin:40px auto;
+    padding:20px;
+}
+h1{text-align:center}
+#question{
+    font-size:32px;
+    margin:30px 0;
+}
+input{
+    width:100%;
+    padding:15px;
+    font-size:22px;
+    box-sizing:border-box;
+}
+button{
+    padding:12px 25px;
+    font-size:18px;
+    margin-top:15px;
+}
+#result{
+    margin-top:20px;
+    min-height:70px;
+    font-size:22px;
+}
+#score,#progress{
+    margin-top:10px;
+    font-size:18px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🌍 Environment Vocabulary Quiz</h1>
+
+<button id="modeBtn" onclick="toggleMode()">
+🎧 Listening Mode: OFF
+</button>
+
+<div id="progress"></div>
+
+<div id="question"></div>
+
+<input
+id="answer"
+type="text"
+placeholder="Nhập từ tiếng Anh rồi nhấn Enter">
+
+<br>
+
+<button
+id="nextBtn"
+onclick="nextAfterWrong()"
+style="display:none">
+Tiếp theo
+</button>
+
+<div id="result"></div>
+<div id="score"></div>
+
+<script>
+
+const words = [
+["Carpenter","Thợ mộc"],
+["Craft","Nghề thủ công; chế tạo thủ công"],
+["Dedication","Sự cống hiến, tận tụy"],
+["Strike","Bị ảnh hưởng mạnh, bị ấn tượng"],
+["Meticulous","Tỉ mỉ, kỹ lưỡng"],
+["Humble","Khiêm tốn"],
+["Adore","Yêu thích, ngưỡng mộ"],
+["Swing","Đung đưa; xích đu"],
+["Pursue","Theo đuổi"],
+["Bargain","Món hời; trả giá"],
+["Consistent","Nhất quán, kiên định"],
+["Wisdom","Trí tuệ, sự khôn ngoan"],
+["Calling","Thiên hướng nghề nghiệp, tiếng gọi"],
+["Mission","Sứ mệnh, nhiệm vụ"],
+["Suffer","Chịu đựng"],
+["Entrepreneurship","Tinh thần khởi nghiệp"],
+
+["Impactful","Có tác động mạnh mẽ"],
+["Savor","Thưởng thức"],
+["Have a knack for","Có năng khiếu"],
+["Hit it off","Hòa hợp ngay lập tức"],
+["Come across","Tình cờ gặp"],
+["Catch my attention","Thu hút sự chú ý"],
+["Handmade toys","Đồ chơi thủ công"],
+["Raw materials","Nguyên liệu thô"],
+["Go out of someone's way to","Cố gắng hết sức để làm"],
+["Wholesale market","Chợ bán sỉ, chợ đầu mối"],
+["A clearance sale","Đợt bán xả hàng"],
+["Look up to","Ngưỡng mộ"],
+["Stem from","Bắt nguồn từ"],
+["Avid reader","Người mê đọc sách"],
+["Be eager to","Háo hức làm gì"]
+];
+
+let mainList=[...Array(words.length).keys()];
+let blacklist=[];
+
+let current=-1;
+let score=0;
+let total=0;
+
+let reviewMode=false;
+let waitingNext=false;
+let listeningMode=false;
+
+function shuffle(arr){
+    for(let i=arr.length-1;i>0;i--){
+        let j=Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+}
+
+shuffle(mainList);
+
+function speakWord(){
+
+    let utterance=
+    new SpeechSynthesisUtterance(
+        words[current][0]
+    );
+
+    utterance.lang="en-US";
+    utterance.rate=0.9;
+
+    speechSynthesis.cancel();
+    speechSynthesis.speak(utterance);
+}
+
+function toggleMode(){
+
+    listeningMode=!listeningMode;
+
+    document.getElementById("modeBtn").innerHTML=
+    listeningMode
+    ? "🎧 Listening Mode: ON"
+    : "🎧 Listening Mode: OFF";
+
+    nextQuestion();
+}
+
+function updateUI(){
+
+    document.getElementById("score").innerHTML=
+    `🏆 ${score}/${total}`;
+
+    if(reviewMode){
+        document.getElementById("progress").innerHTML=
+        `📚 Blacklist còn ${blacklist.length} từ`;
+    }else{
+        document.getElementById("progress").innerHTML=
+        `📖 Còn ${mainList.length} từ`;
+    }
+}
+
+function nextQuestion(){
+
+    if(!reviewMode){
+
+        if(mainList.length===0){
+
+            if(blacklist.length===0){
+                finish();
+                return;
+            }
+
+            reviewMode=true;
+        }
+    }
+
+    if(reviewMode){
+
+        if(blacklist.length===0){
+            finish();
+            return;
+        }
+
+        current=blacklist[0];
+
+    }else{
+
+        current=mainList[0];
+    }
+
+    if(listeningMode){
+
+        document.getElementById("question").innerHTML=
+        "🎧 Nhấn TAB để nghe";
+
+    }else{
+
+        document.getElementById("question").innerHTML=
+        "👉 "+words[current][1];
+    }
+
+    document.getElementById("answer").value="";
+    document.getElementById("result").innerHTML="";
+    document.getElementById("nextBtn").style.display="none";
+
+    waitingNext=false;
+
+    updateUI();
+
+    document.getElementById("answer").focus();
+}
+
+function finish(){
+
+    document.getElementById("question").innerHTML=
+    "🎉 Hoàn thành!";
+
+    document.getElementById("answer").style.display="none";
+
+    document.getElementById("nextBtn").style.display="none";
+}
+
+function checkAnswer(){
+
+    if(waitingNext)return;
+
+    let user=document
+    .getElementById("answer")
+    .value
+    .trim()
+    .toLowerCase();
+
+    if(!user)return;
+
+    total++;
+
+    let correct=
+    words[current][0]
+    .toLowerCase();
+
+    if(user===correct){
+
+        score++;
+
+        if(reviewMode){
+            blacklist.shift();
+        }else{
+            mainList.shift();
+        }
+
+        document.getElementById("result").innerHTML=
+        "✅ Chính xác";
+
+        updateUI();
+
+        setTimeout(nextQuestion,300);
+
+    }else{
+
+        if(!reviewMode &&
+        !blacklist.includes(current)){
+            blacklist.push(current);
+        }
+
+        waitingNext=true;
+
+        document.getElementById("result").innerHTML=
+        listeningMode
+        ? `❌ Sai<br><br>
+        Đáp án: <b>${words[current][0]}</b><br>
+        Nghĩa: <b>${words[current][1]}</b>`
+        : `❌ Sai<br><br>
+        Đáp án: <b>${words[current][0]}</b>`;
+
+        document.getElementById("nextBtn").style.display=
+        "inline-block";
+    }
+}
+
+function nextAfterWrong(){
+
+    if(reviewMode){
+
+        blacklist.push(
+            blacklist.shift()
+        );
+
+    }else{
+
+        mainList.push(
+            mainList.shift()
+        );
+    }
+
+    waitingNext=false;
+
+    nextQuestion();
+}
+
+document
+.getElementById("answer")
+.addEventListener("keydown",function(e){
+
+    if(e.key==="Enter"){
+        checkAnswer();
+    }
+
+    if(e.key==="Tab"){
+
+        e.preventDefault();
+
+        if(listeningMode){
+            speakWord();
+        }
+    }
+
+});
+
+nextQuestion();
+
+</script>
+
+</body>
+</html>
