@@ -1,48 +1,83 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>Vocabulary Quiz</title>
 
 <style>
+
 body{
     font-family:Arial,sans-serif;
     max-width:900px;
     margin:40px auto;
     padding:20px;
 }
-h1{text-align:center}
+
+h1{
+    text-align:center;
+}
+
+select{
+    padding:10px;
+    font-size:18px;
+    margin-bottom:15px;
+}
+
+button{
+    padding:12px 25px;
+    font-size:18px;
+    margin-top:10px;
+}
+
 #question{
     font-size:32px;
     margin:30px 0;
 }
+
 input{
     width:100%;
     padding:15px;
     font-size:22px;
     box-sizing:border-box;
 }
-button{
-    padding:12px 25px;
-    font-size:18px;
-    margin-top:15px;
-}
+
 #result{
     margin-top:20px;
     min-height:70px;
     font-size:22px;
 }
+
 #score,#progress{
     margin-top:10px;
     font-size:18px;
 }
+
 </style>
+
 </head>
 
 <body>
 
-<h1>🌍 Environment Vocabulary Quiz</h1>
+<h1>🌍 Vocabulary Quiz</h1>
+
+<select id="groupSelect">
+
+<option value="group1">Group 1</option>
+<option value="group2">Group 2</option>
+<option value="group3">Group 3</option>
+<option value="group4">Group 4</option>
+<option value="group5">Group 5</option>
+<option value="group6">Group 6</option>
+<option value="group7">Group 7</option>
+<option value="group8">Group 8</option>
+<option value="group9">Group 9</option>
+<option value="group10">Group 10</option>
+<option value="full">Full</option>
+
+</select>
 
 <button id="modeBtn" onclick="toggleMode()">
 🎧 Listening Mode: OFF
@@ -67,49 +102,632 @@ Tiếp theo
 </button>
 
 <div id="result"></div>
+
 <div id="score"></div>
 
 <script>
 
-const words = [
-["Carpenter","Thợ mộc"],
-["Craft","Nghề thủ công; chế tạo thủ công"],
-["Dedication","Sự cống hiến, tận tụy"],
-["Strike","Bị ảnh hưởng mạnh, bị ấn tượng"],
-["Meticulous","Tỉ mỉ, kỹ lưỡng"],
-["Humble","Khiêm tốn"],
-["Adore","Yêu thích, ngưỡng mộ"],
-["Swing","Đung đưa; xích đu"],
-["Pursue","Theo đuổi"],
-["Bargain","Món hời; trả giá"],
-["Consistent","Nhất quán, kiên định"],
-["Wisdom","Trí tuệ, sự khôn ngoan"],
-["Calling","Thiên hướng nghề nghiệp, tiếng gọi"],
-["Mission","Sứ mệnh, nhiệm vụ"],
-["Suffer","Chịu đựng"],
-["Entrepreneurship","Tinh thần khởi nghiệp"],
+const groups={
 
-["Impactful","Có tác động mạnh mẽ"],
-["Savor","Thưởng thức"],
-["Have a knack for","Có năng khiếu"],
-["Hit it off","Hòa hợp ngay lập tức"],
-["Come across","Tình cờ gặp"],
-["Catch my attention","Thu hút sự chú ý"],
-["Handmade toys","Đồ chơi thủ công"],
-["Raw materials","Nguyên liệu thô"],
-["Go out of someone's way to","Cố gắng hết sức để làm"],
-["Wholesale market","Chợ bán sỉ, chợ đầu mối"],
-["A clearance sale","Đợt bán xả hàng"],
-["Look up to","Ngưỡng mộ"],
-["Stem from","Bắt nguồn từ"],
-["Avid reader","Người mê đọc sách"],
-["Be eager to","Háo hức làm gì"]
-];
+group1:[
+        ["Analysis","Sự phân tích"],
+        ["Approach","Phương pháp, tiếp cận"],
+        ["Area","Phạm vi hiểu biết, chuyên môn"],
+        ["Assess","Đánh giá"],
+        ["Assume","Cho rằng, giả định"],
+        ["Authority","Chuyên gia"],
+        ["Available","Có thể mua được, sử dụng được"],
+        ["Benefit","Lợi thế, lợi ích"],
+        ["Concept","Khái niệm"],
+        ["Consist","Bao gồm, gồm có"],
+        ["Constitute","Thiết lập, thành lập"],
+        ["Context","Trong hoàn cảnh"],
+        ["Contract","Hợp đồng"],
+        ["Create","Tạo ra, gây nên"],
+        ["Data","Thông tin"],
+        ["Define","Chắc chắn; định nghĩa"],
+        ["Derive","Nhận được, bắt nguồn từ"],
+        ["Distribute","Phân phối, phân phát"],
+        ["Economic","Thuộc kinh tế"],
+        ["Environment","Môi trường"],
+        ["Establish","Thành lập, thiết lập"],
+        ["Estimate","Ước lượng, đánh giá"],
+        ["Evident","Hiển nhiên, rõ ràng"],
+        ["Export","Xuất khẩu"],
+        ["Factor","Nhân tố, yếu tố"],
+        ["Finance","Tài chính"],
+        ["Formula","Công thức"],
+        ["Function","Chức năng"],
+        ["Identify","Nhận diện"],
+        ["Income","Thu nhập"],
+        ["Indicate","Chỉ ra, biểu lộ"],
+        ["Individual","Riêng lẻ, cá nhân"],
+        ["Interpret","Giải thích"],
+        ["Involve","Bao gồm, liên quan"],
+        ["Issue","Vấn đề"],
+        ["Labour","Lao động"],
+        ["Legal","Hợp pháp"],
+        ["Legislate","Lập pháp"],
+        ["Major","Chủ yếu, quan trọng"],
+        ["Method","Phương pháp"],
+        ["Occur","Xảy ra"],
+        ["Per cent","Phần trăm"],
+        ["Period","Giai đoạn, khoảng thời gian"],
+        ["Policy","Chính sách"],
+        ["Principle","Nguyên tắc"],
+        ["Proceed","Tiếp tục, tiến hành"],
+        ["Process","Quá trình"],
+        ["Require","Yêu cầu, đòi hỏi"],
+        ["Research","Nghiên cứu"],
+        ["Respond","Đáp lại, phản hồi"],
+        ["Role","Vai trò"],
+        ["Section","Phần, mục"],
+        ["Sector","Khu vực, lĩnh vực"],
+        ["Significant","Quan trọng, đáng kể"],
+        ["Similar","Tương tự"],
+        ["Source","Nguồn"],
+        ["Specific","Cụ thể, rõ ràng"],
+        ["Structure","Cấu trúc"],
+        ["Theory","Học thuyết"],
+        ["Vary","Thay đổi"]
+    ],
+    group2:[
+        ["Achieve","Thành công"],
+        ["Acquire","Thu được, đạt được"],
+        ["Administration","Sự quản lý"],
+        ["Affect","Ảnh hưởng đến"],
+        ["Appropriate","Phù hợp"],
+        ["Aspect","Khía cạnh"],
+        ["Assist","Giúp đỡ"],
+        ["Category","Nhóm"],
+        ["Chapter","Chương"],
+        ["Commission","Ủy ban"],
+        ["Community","Cộng đồng"],
+        ["Complex","Phức tạp"],
+        ["Compute","Tính toán"],
+        ["Conclude","Kết thúc"],
+        ["Conduct","Tiến hành"],
+        ["Consequence","Kết quả"],
+        ["Construct","Xây dựng"],
+        ["Consumer","Người tiêu dùng"],
+        ["Credit","Sự ghi nhận"],
+        ["Culture","Văn hóa"],
+        ["Design","Thiết kế"],
+        ["Distinct","Khác biệt"],
+        ["Element","Yếu tố"],
+        ["Equate","Coi ngang bằng"],
+        ["Evaluate","Đánh giá"],
+        ["Feature","Đặc điểm"],
+        ["Final","Cuối cùng"],
+        ["Focus","Tập trung"],
+        ["Impact","Tác động"],
+        ["Injury","Chấn thương"],
+        ["Institute","Viện"],
+        ["Invest","Đầu tư"],
+        ["Item","Đồ vật"],
+        ["Journal","Tạp chí"],
+        ["Maintain","Duy trì"],
+        ["Normal","Bình thường"],
+        ["Obtain","Đạt được"],
+        ["Participate","Tham gia"],
+        ["Perceive","Nhận thức"],
+        ["Positive","Tích cực"],
+        ["Potential","Tiềm năng"],
+        ["Previous","Trước đây"],
+        ["Primary","Chính, chủ yếu"],
+        ["Purchase","Sự mua bán"],
+        ["Range","Phạm vi, nhiều loại"],
+        ["Region","Vùng miền"],
+        ["Regulate","Quy định"],
+        ["Relevant","Liên quan"],
+        ["Reside","Cư trú"],
+        ["Resource","Tài nguyên"],
+        ["Restrict","Hạn chế"],
+        ["Secure","An toàn, bảo đảm"],
+        ["Seek","Tìm kiếm"],
+        ["Select","Lựa chọn"],
+        ["Site","Địa điểm"],
+        ["Strategy","Chiến lược"],
+        ["Survey","Khảo sát"],
+        ["Text","Văn bản"],
+        ["Tradition","Truyền thống"],
+        ["Transfer","Chuyển giao"]
+    ],
+    group3:[
+        ["Alternative","Sự lựa chọn"],
+        ["Circumstance","Hoàn cảnh"],
+        ["Comment","Lời nhận xét"],
+        ["Compensate","Bồi thường"],
+        ["Component","Thành phần"],
+        ["Consent","Sự đồng ý"],
+        ["Considerable","Đáng kể"],
+        ["Constant","Thường xuyên"],
+        ["Constrain","Bắt ép"],
+        ["Contribute","Đóng góp"],
+        ["Conventional","Truyền thống"],
+        ["Coordinate","Phối hợp"],
+        ["Core","Cốt lõi"],
+        ["Corporate","Thuộc tổ chức"],
+        ["Corresponding","Tương ứng"],
+        ["Criteria","Tiêu chuẩn"],
+        ["Deduce","Suy luận"],
+        ["Demonstrate","Chứng minh"],
+        ["Document","Tài liệu"],
+        ["Dominant","Chiếm ưu thế"],
+        ["Emphasis","Sự nhấn mạnh"],
+        ["Ensure","Đảm bảo"],
+        ["Exclude","Loại trừ"],
+        ["Framework","Khuôn khổ"],
+        ["Fund","Quỹ"],
+        ["Illustrate","Minh họa"],
+        ["Immigrate","Nhập cư"],
+        ["Imply","Ngụ ý"],
+        ["Initial","Ban đầu"],
+        ["Instance","Ví dụ"],
+        ["Interaction","Sự tương tác"],
+        ["Justification","Sự biện minh"],
+        ["Layer","Lớp"],
+        ["Link","Sự liên kết"],
+        ["Locate","Định vị"],
+        ["Maximise","Tối đa hóa"],
+        ["Minor","Nhỏ, không quan trọng"],
+        ["Negative","Tiêu cực"],
+        ["Outcome","Kết quả"],
+        ["Partnership","Quan hệ hợp tác"],
+        ["Philosophy","Triết học"],
+        ["Physical","Thuộc thể chất"],
+        ["Proportion","Tỷ lệ"],
+        ["Published","Được xuất bản"],
+        ["Reaction","Phản ứng"],
+        ["Registered","Đã đăng ký"],
+        ["Rely","Dựa vào"],
+        ["Remove","Loại bỏ"],
+        ["Scheme","Kế hoạch"],
+        ["Sequence","Trình tự"],
+        ["Sex","Giới tính"],
+        ["Shift","Thay đổi"],
+        ["Specify","Chỉ rõ"],
+        ["Sufficient","Đủ"],
+        ["Task","Nhiệm vụ"],
+        ["Technical","Thuộc kỹ thuật"],
+        ["Techniques","Kỹ thuật"],
+        ["Technology","Công nghệ"],
+        ["Valid","Hợp lệ"],
+        ["Volume","Khối lượng"]
+    ],
+    group4:[
+        ["Access","Truy cập"],
+        ["Adequate","Đủ"],
+        ["Annual","Thường niên"],
+        ["Apparent","Rõ ràng"],
+        ["Approximate","Xấp xỉ"],
+        ["Attitude","Thái độ"],
+        ["Attribute","Quy cho"],
+        ["Civil","Nội bộ"],
+        ["Code","Bộ luật"],
+        ["Commitment","Cam kết"],
+        ["Communicate","Giao tiếp"],
+        ["Concentrate","Tập trung"],
+        ["Conference","Hội nghị"],
+        ["Contrast","Sự tương phản"],
+        ["Cycle","Chu kỳ"],
+        ["Debate","Tranh luận"],
+        ["Despite","Mặc dù"],
+        ["Dimension","Kích thước"],
+        ["Domestic","Trong nước"],
+        ["Emerge","Xuất hiện"],
+        ["Error","Lỗi"],
+        ["Ethnic","Thuộc dân tộc"],
+        ["Goal","Mục tiêu"],
+        ["Grant","Trợ cấp"],
+        ["Hence","Vì thế"],
+        ["Hypothesis","Giả thuyết"],
+        ["Implement","Thực hiện"],
+        ["Implication","Hệ quả"],
+        ["Impose","Áp đặt"],
+        ["Integrate","Tích hợp"],
+        ["Internal","Nội bộ"],
+        ["Investigate","Điều tra"],
+        ["Job","Nghề nghiệp"],
+        ["Label","Nhãn"],
+        ["Mechanism","Cơ chế"],
+        ["Obvious","Rõ ràng"],
+        ["Occupational","Thuộc nghề nghiệp"],
+        ["Option","Lựa chọn"],
+        ["Output","Sản lượng"],
+        ["Overall","Tổng thể"],
+        ["Parallel","Song song"],
+        ["Parameter","Tham số"],
+        ["Phase","Giai đoạn"],
+        ["Predict","Dự đoán"],
+        ["Principal","Chủ yếu"],
+        ["Prior","Trước"],
+        ["Professional","Chuyên nghiệp"],
+        ["Project","Dự án"],
+        ["Promote","Thúc đẩy"],
+        ["Regime","Chế độ"],
+        ["Resolve","Giải quyết"],
+        ["Retain","Giữ lại"],
+        ["Series","Chuỗi"],
+        ["Statistic","Số liệu thống kê"],
+        ["Status","Địa vị"],
+        ["Stress","Áp lực"],
+        ["Subsequent","Tiếp theo"],
+        ["Sum","Tổng số"],
+        ["Summary","Tóm tắt"],
+        ["Undertake","Đảm nhận"]
+    ],
+    group5:[
+        ["Academic","Có tính chất học thuật"],
+        ["Adjustment","Sự điều chỉnh"],
+        ["Alter","Thay đổi"],
+        ["Amend","Sửa đổi"],
+        ["Aware","Nhận thức"],
+        ["Capacity","Năng lực"],
+        ["Challenge","Thách thức"],
+        ["Clause","Điều khoản"],
+        ["Compound","Hợp chất"],
+        ["Conflict","Xung đột"],
+        ["Consultation","Sự tham khảo"],
+        ["Contact","Liên hệ"],
+        ["Decline","Suy giảm"],
+        ["Discretion","Sự tùy ý"],
+        ["Draft","Bản nháp"],
+        ["Enable","Cho phép"],
+        ["Energy","Năng lượng"],
+        ["Enforce","Thực thi"],
+        ["Entity","Thực thể"],
+        ["Equivalent","Tương đương"],
+        ["Evolution","Sự tiến hóa"],
+        ["Expansion","Sự mở rộng"],
+        ["Expose","Phơi bày"],
+        ["External","Bên ngoài"],
+        ["Facilitate","Tạo điều kiện"],
+        ["Fundamental","Cơ bản"],
+        ["Generate","Tạo ra"],
+        ["Generation","Thế hệ"],
+        ["Image","Hình ảnh"],
+        ["Liberal","Tự do"],
+        ["Licence","Giấy phép"],
+        ["Logic","Logic"],
+        ["Margin","Biên độ"],
+        ["Medical","Thuộc y học"],
+        ["Mental","Thuộc tinh thần"],
+        ["Modify","Sửa đổi"],
+        ["Monitor","Theo dõi"],
+        ["Network","Mạng lưới"],
+        ["Notion","Khái niệm"],
+        ["Objective","Khách quan"],
+        ["Orientation","Định hướng"],
+        ["Perspective","Quan điểm"],
+        ["Precise","Chính xác"],
+        ["Prime","Chủ yếu"],
+        ["Psychology","Tâm lý học"],
+        ["Pursue","Theo đuổi"],
+        ["Ratio","Tỷ lệ"],
+        ["Reject","Từ chối"],
+        ["Revenue","Doanh thu"],
+        ["Stable","Ổn định"],
+        ["Style","Phong cách"],
+        ["Substitute","Thay thế"],
+        ["Sustain","Duy trì"],
+        ["Symbol","Biểu tượng"],
+        ["Target","Mục tiêu"],
+        ["Transit","Sự vận chuyển"],
+        ["Trend","Xu hướng"],
+        ["Version","Phiên bản"],
+        ["Welfare","Phúc lợi"],
+        ["Whereas","Trong khi đó"]
+    ],
+    group6:[
+        ["Abstract","Trừu tượng"],
+        ["Accurate","Chính xác"],
+        ["Acknowledge","Thừa nhận"],
+        ["Aggregate","Tổng số"],
+        ["Allocate","Phân bổ"],
+        ["Assign","Phân công"],
+        ["Attach","Đính kèm"],
+        ["Author","Tác giả"],
+        ["Bond","Mối quan hệ"],
+        ["Brief","Ngắn gọn"],
+        ["Capable","Có năng lực"],
+        ["Cite","Trích dẫn"],
+        ["Cooperative","Hợp tác"],
+        ["Discrimination","Sự phân biệt đối xử"],
+        ["Display","Trưng bày"],
+        ["Diversity","Sự đa dạng"],
+        ["Domain","Lĩnh vực"],
+        ["Edition","Ấn bản"],
+        ["Enhance","Nâng cao"],
+        ["Estate","Tài sản"],
+        ["Exceed","Vượt quá"],
+        ["Expert","Chuyên gia"],
+        ["Explicit","Rõ ràng"],
+        ["Federal","Thuộc liên bang"],
+        ["Fee","Phí"],
+        ["Flexible","Linh hoạt"],
+        ["Furthermore","Hơn nữa"],
+        ["Gender","Giới tính"],
+        ["Ignore","Phớt lờ"],
+        ["Incentive","Động lực"],
+        ["Incidence","Tỷ lệ xảy ra"],
+        ["Incorporate","Kết hợp"],
+        ["Index","Mục lục"],
+        ["Inhibit","Ngăn cản"],
+        ["Initiate","Khởi xướng"],
+        ["Input","Đầu vào"],
+        ["Instruct","Hướng dẫn"],
+        ["Intelligent","Thông minh"],
+        ["Interval","Khoảng thời gian"],
+        ["Lecture","Bài giảng"],
+        ["Migrate","Di cư"],
+        ["Minimum","Tối thiểu"],
+        ["Ministry","Bộ"],
+        ["Motive","Động cơ"],
+        ["Neutral","Trung lập"],
+        ["Nevertheless","Tuy nhiên"],
+        ["Overseas","Ở nước ngoài"],
+        ["Precede","Đi trước"],
+        ["Presume","Cho rằng"],
+        ["Rational","Hợp lý"],
+        ["Recover","Phục hồi"],
+        ["Reveal","Tiết lộ"],
+        ["Scope","Phạm vi"],
+        ["Subsidy","Trợ cấp"],
+        ["Tape","Băng ghi âm"],
+        ["Trace","Truy tìm"],
+        ["Transform","Biến đổi"],
+        ["Transport","Vận tải"],
+        ["Underlying","Tiềm ẩn"],
+        ["Utilise","Sử dụng"]
+    ],
 
-let mainList=[...Array(words.length).keys()];
+    group7:[
+        ["Adaptation","Sự thích nghi"],
+        ["Adult","Người trưởng thành"],
+        ["Advocate","Ủng hộ"],
+        ["Aid","Sự giúp đỡ"],
+        ["Channel","Chuyển hướng"],
+        ["Chemical","Thuộc hóa học"],
+        ["Classical","Cổ điển"],
+        ["Comprehensive","Toàn diện"],
+        ["Comprise","Bao gồm"],
+        ["Confirm","Xác nhận"],
+        ["Contrary","Trái ngược"],
+        ["Convert","Chuyển đổi"],
+        ["Couple","Cặp, đôi"],
+        ["Decade","Thập kỷ"],
+        ["Definite","Chắc chắn"],
+        ["Deny","Phủ nhận"],
+        ["Differentiate","Phân biệt"],
+        ["Disposal","Sự xử lý"],
+        ["Dynamic","Năng động"],
+        ["Eliminate","Loại bỏ"],
+        ["Empirical","Thực nghiệm"],
+        ["Equipment","Thiết bị"],
+        ["Extract","Chiết xuất"],
+        ["File","Hồ sơ"],
+        ["Finite","Hữu hạn"],
+        ["Foundation","Nền tảng"],
+        ["Globe","Toàn cầu"],
+        ["Grade","Cấp bậc"],
+        ["Guarantee","Sự bảo đảm"],
+        ["Hierarchical","Có thứ bậc"],
+        ["Identical","Giống hệt"],
+        ["Ideology","Hệ tư tưởng"],
+        ["Infer","Suy ra"],
+        ["Innovation","Đổi mới"],
+        ["Insert","Chèn vào"],
+        ["Intervene","Can thiệp"],
+        ["Isolate","Cô lập"],
+        ["Media","Truyền thông"],
+        ["Mode","Phương thức"],
+        ["Paradigm","Mô hình"],
+        ["Phenomenon","Hiện tượng"],
+        ["Priority","Ưu tiên"],
+        ["Prohibit","Cấm"],
+        ["Publication","Sự xuất bản"],
+        ["Quote","Trích dẫn"],
+        ["Release","Giải phóng"],
+        ["Reverse","Đảo ngược"],
+        ["Simulate","Mô phỏng"],
+        ["Sole","Duy nhất"],
+        ["Somewhat","Hơi, phần nào"],
+        ["Submit","Nộp"],
+        ["Successor","Người kế nhiệm"],
+        ["Survive","Sống sót"],
+        ["Thesis","Luận án"],
+        ["Topic","Chủ đề"],
+        ["Transmit","Truyền tải"],
+        ["Ultimate","Cuối cùng"],
+        ["Unique","Độc nhất"],
+        ["Visible","Có thể nhìn thấy"],
+        ["Voluntary","Tự nguyện"]
+    ],
+        group8:[
+        ["Abandon","Ngừng làm gì đó"],
+        ["Accompany","Đi cùng, đi theo"],
+        ["Accumulation","Sự tích lũy"],
+        ["Ambiguous","Mơ hồ, đa nghĩa"],
+        ["Appendix","Phụ lục"],
+        ["Appreciate","Hiểu rõ, nhận thức đúng"],
+        ["Arbitrary","Tùy ý, độc đoán"],
+        ["Automate","Tự động hóa"],
+        ["Bias","Sự thiên vị"],
+        ["Chart","Biểu đồ"],
+        ["Clarify","Làm rõ"],
+        ["Commodity","Hàng hóa"],
+        ["Complement","Bổ sung, bổ trợ"],
+        ["Conform","Tuân theo"],
+        ["Contemporary","Đương thời, hiện tại"],
+        ["Contradiction","Sự mâu thuẫn"],
+        ["Crucial","Cực kỳ quan trọng"],
+        ["Currency","Tiền tệ"],
+        ["Denote","Biểu thị"],
+        ["Detect","Phát hiện"],
+        ["Deviation","Sự lệch lạc"],
+        ["Displace","Thay thế"],
+        ["Dramatic","Đột ngột, đáng kể"],
+        ["Eventually","Cuối cùng"],
+        ["Exhibit","Trưng bày"],
+        ["Exploit","Khai thác"],
+        ["Fluctuate","Biến động"],
+        ["Guideline","Nguyên tắc chỉ đạo"],
+        ["Highlight","Nhấn mạnh"],
+        ["Implicit","Ngầm, tiềm ẩn"],
+        ["Induce","Gây ra"],
+        ["Inevitable","Không thể tránh khỏi"],
+        ["Infrastructure","Cơ sở hạ tầng"],
+        ["Inspection","Sự kiểm tra"],
+        ["Intense","Mãnh liệt"],
+        ["Manipulate","Thao túng, điều khiển"],
+        ["Minimise","Giảm thiểu"],
+        ["Nuclear","Thuộc hạt nhân"],
+        ["Offset","Bù đắp"],
+        ["Paragraph","Đoạn văn"],
+        ["Plus","Cộng với"],
+        ["Practitioner","Người hành nghề"],
+        ["Predominantly","Chủ yếu"],
+        ["Prospect","Triển vọng"],
+        ["Radical","Cấp tiến"],
+        ["Random","Ngẫu nhiên"],
+        ["Reinforce","Củng cố"],
+        ["Restore","Khôi phục"],
+        ["Revise","Sửa đổi"],
+        ["Schedule","Lịch trình"],
+        ["Tense","Căng thẳng"],
+        ["Terminate","Chấm dứt"],
+        ["Theme","Chủ đề"],
+        ["Thereby","Do đó"],
+        ["Uniform","Đồng đều"],
+        ["Vehicle","Phương tiện"],
+        ["Via","Thông qua"],
+        ["Virtual","Gần như"],
+        ["Visual","Thuộc thị giác"],
+        ["Widespread","Phổ biến"]
+    ],
+    group9:[
+        ["Accommodation","Chỗ ở"],
+        ["Analogy","Sự tương tự"],
+        ["Anticipate","Mong đợi"],
+        ["Assure","Cam đoan"],
+        ["Attain","Đạt được"],
+        ["Behalf","Thay mặt"],
+        ["Bulk","Số lượng lớn"],
+        ["Cease","Ngừng"],
+        ["Coherent","Mạch lạc"],
+        ["Coincide","Trùng khớp"],
+        ["Commence","Bắt đầu"],
+        ["Compatible","Tương thích"],
+        ["Concurrent","Đồng thời"],
+        ["Confine","Giới hạn"],
+        ["Controversy","Cuộc tranh cãi"],
+        ["Conversely","Ngược lại"],
+        ["Device","Thiết bị"],
+        ["Devote","Cống hiến"],
+        ["Diminish","Giảm bớt"],
+        ["Distort","Bóp méo"],
+        ["Duration","Khoảng thời gian"],
+        ["Erode","Xói mòn"],
+        ["Ethical","Thuộc đạo đức"],
+        ["Format","Định dạng"],
+        ["Found","Thành lập"],
+        ["Inherent","Vốn có"],
+        ["Insight","Cái nhìn sâu sắc"],
+        ["Integral","Không thể thiếu"],
+        ["Intermediate","Trung gian"],
+        ["Manual","Làm bằng tay"],
+        ["Mature","Trưởng thành"],
+        ["Mediate","Hòa giải"],
+        ["Medium","Phương tiện truyền thông"],
+        ["Military","Thuộc quân sự"],
+        ["Minimal","Tối thiểu"],
+        ["Mutual","Chung"],
+        ["Norm","Quy tắc"],
+        ["Overlap","Chồng chéo"],
+        ["Passive","Thụ động"],
+        ["Portion","Phần"],
+        ["Preliminary","Sơ bộ"],
+        ["Protocol","Giao thức"],
+        ["Qualitative","Thuộc chất lượng"],
+        ["Refine","Tinh chế"],
+        ["Relaxed","Thư giãn"],
+        ["Restrain","Ngăn cản"],
+        ["Revolution","Cuộc cách mạng"],
+        ["Rigid","Cứng nhắc"],
+        ["Route","Tuyến đường"],
+        ["Scenario","Viễn cảnh"],
+        ["Sphere","Hình cầu"],
+        ["Subordinate","Cấp dưới"],
+        ["Supplement","Phần bổ sung"],
+        ["Suspend","Đình chỉ"],
+        ["Team","Đội, nhóm"],
+        ["Temporary","Tạm thời"],
+        ["Trigger","Gây nên"],
+        ["Unify","Thống nhất"],
+        ["Violate","Vi phạm"],
+        ["Vision","Tầm nhìn"]
+    ],
+    group10:[
+        ["Adjacent","Liền kề"],
+        ["Albeit","Mặc dù"],
+        ["Assembly","Hội đồng"],
+        ["Collapse","Sụp đổ"],
+        ["Colleague","Đồng nghiệp"],
+        ["Compile","Biên soạn, sưu tầm"],
+        ["Conceive","Hình dung, tưởng tượng"],
+        ["Convince","Thuyết phục"],
+        ["Depression","Trầm cảm"],
+        ["Encounter","Chạm trán"],
+        ["Enormous","Khổng lồ"],
+        ["Forthcoming","Sắp tới"],
+        ["Inclination","Xu hướng, ý muốn"],
+        ["Integrity","Sự chính trực"],
+        ["Intrinsic","Thuộc bản chất"],
+        ["Invoke","Viện dẫn"],
+        ["Levy","Đánh thuế"],
+        ["Likewise","Tương tự"],
+        ["Nonetheless","Tuy nhiên"],
+        ["Notwithstanding","Mặc dù"],
+        ["Odds","Khả năng, cơ hội"],
+        ["Ongoing","Đang tiếp diễn"],
+        ["Panel","Hội đồng, ban"],
+        ["Persist","Kiên trì"],
+        ["Pose","Đặt ra, gây ra"],
+        ["Reluctant","Miễn cưỡng"],
+        ["So-called","Cái gọi là"],
+        ["Straightforward","Đơn giản"],
+        ["Undergo","Trải qua"],
+        ["Whereby","Theo đó"]
+    ]
+};
+
+let words=[];
+
+function loadWords(){
+
+    if(groupSelect.value==="full"){
+
+        words=[];
+
+        for(let i=1;i<=10;i++){
+
+            words.push(...groups["group"+i]);
+
+        }
+
+    }else{
+
+        words=[...groups[groupSelect.value]];
+
+    }
+
+}
+let mainList=[];
 let blacklist=[];
 
 let current=-1;
+
 let score=0;
 let total=0;
 
@@ -118,26 +736,59 @@ let waitingNext=false;
 let listeningMode=false;
 
 function shuffle(arr){
+
     for(let i=arr.length-1;i>0;i--){
+
         let j=Math.floor(Math.random()*(i+1));
+
         [arr[i],arr[j]]=[arr[j],arr[i]];
+
     }
+
 }
 
-shuffle(mainList);
+function resetQuiz(){
+
+    loadWords();
+
+    mainList=[...Array(words.length).keys()];
+
+    blacklist=[];
+
+    current=-1;
+
+    score=0;
+
+    total=0;
+
+    reviewMode=false;
+
+    waitingNext=false;
+
+    shuffle(mainList);
+
+    document.getElementById("answer").style.display="block";
+
+    nextQuestion();
+
+}
 
 function speakWord(){
 
-    let utterance=
-    new SpeechSynthesisUtterance(
+    if(current===-1)return;
+
+    let utterance=new SpeechSynthesisUtterance(
         words[current][0]
     );
 
     utterance.lang="en-US";
+
     utterance.rate=0.9;
 
     speechSynthesis.cancel();
+
     speechSynthesis.speak(utterance);
+
 }
 
 function toggleMode(){
@@ -145,27 +796,42 @@ function toggleMode(){
     listeningMode=!listeningMode;
 
     document.getElementById("modeBtn").innerHTML=
+
     listeningMode
+
     ? "🎧 Listening Mode: ON"
+
     : "🎧 Listening Mode: OFF";
 
     nextQuestion();
+
 }
 
 function updateUI(){
 
     document.getElementById("score").innerHTML=
+
     `🏆 ${score}/${total}`;
 
     if(reviewMode){
+
         document.getElementById("progress").innerHTML=
+
         `📚 Blacklist còn ${blacklist.length} từ`;
-    }else{
-        document.getElementById("progress").innerHTML=
-        `📖 Còn ${mainList.length} từ`;
+
     }
+
+    else{
+
+        document.getElementById("progress").innerHTML=
+
+        `📖 Còn ${mainList.length} từ`;
+
+    }
+
 }
 
+groupSelect.addEventListener("change",resetQuiz);
 function nextQuestion(){
 
     if(!reviewMode){
@@ -173,41 +839,59 @@ function nextQuestion(){
         if(mainList.length===0){
 
             if(blacklist.length===0){
+
                 finish();
+
                 return;
+
             }
 
             reviewMode=true;
+
         }
+
     }
 
     if(reviewMode){
 
         if(blacklist.length===0){
+
             finish();
+
             return;
+
         }
 
         current=blacklist[0];
 
-    }else{
+    }
+
+    else{
 
         current=mainList[0];
+
     }
 
     if(listeningMode){
 
         document.getElementById("question").innerHTML=
+
         "🎧 Nhấn TAB để nghe";
 
-    }else{
+    }
+
+    else{
 
         document.getElementById("question").innerHTML=
+
         "👉 "+words[current][1];
+
     }
 
     document.getElementById("answer").value="";
+
     document.getElementById("result").innerHTML="";
+
     document.getElementById("nextBtn").style.display="none";
 
     waitingNext=false;
@@ -215,16 +899,23 @@ function nextQuestion(){
     updateUI();
 
     document.getElementById("answer").focus();
+
 }
 
 function finish(){
 
     document.getElementById("question").innerHTML=
+
     "🎉 Hoàn thành!";
 
     document.getElementById("answer").style.display="none";
 
     document.getElementById("nextBtn").style.display="none";
+
+    document.getElementById("result").innerHTML=
+
+    `🏆 Điểm cuối: ${score}/${total}`;
+
 }
 
 function checkAnswer(){
@@ -232,9 +923,13 @@ function checkAnswer(){
     if(waitingNext)return;
 
     let user=document
+
     .getElementById("answer")
+
     .value
+
     .trim()
+
     .toLowerCase();
 
     if(!user)return;
@@ -242,7 +937,9 @@ function checkAnswer(){
     total++;
 
     let correct=
+
     words[current][0]
+
     .toLowerCase();
 
     if(user===correct){
@@ -250,38 +947,59 @@ function checkAnswer(){
         score++;
 
         if(reviewMode){
+
             blacklist.shift();
-        }else{
+
+        }
+
+        else{
+
             mainList.shift();
+
         }
 
         document.getElementById("result").innerHTML=
+
         "✅ Chính xác";
 
         updateUI();
 
         setTimeout(nextQuestion,300);
 
-    }else{
+    }
+
+    else{
 
         if(!reviewMode &&
+
         !blacklist.includes(current)){
+
             blacklist.push(current);
+
         }
 
         waitingNext=true;
 
         document.getElementById("result").innerHTML=
+
         listeningMode
+
         ? `❌ Sai<br><br>
+
         Đáp án: <b>${words[current][0]}</b><br>
+
         Nghĩa: <b>${words[current][1]}</b>`
+
         : `❌ Sai<br><br>
+
         Đáp án: <b>${words[current][0]}</b>`;
 
         document.getElementById("nextBtn").style.display=
+
         "inline-block";
+
     }
+
 }
 
 function nextAfterWrong(){
@@ -289,27 +1007,36 @@ function nextAfterWrong(){
     if(reviewMode){
 
         blacklist.push(
+
             blacklist.shift()
+
         );
 
-    }else{
+    }
+
+    else{
 
         mainList.push(
+
             mainList.shift()
+
         );
+
     }
 
     waitingNext=false;
 
     nextQuestion();
-}
 
+}
 document
 .getElementById("answer")
 .addEventListener("keydown",function(e){
 
     if(e.key==="Enter"){
+
         checkAnswer();
+
     }
 
     if(e.key==="Tab"){
@@ -317,13 +1044,16 @@ document
         e.preventDefault();
 
         if(listeningMode){
+
             speakWord();
+
         }
+
     }
 
 });
 
-nextQuestion();
+resetQuiz();
 
 </script>
 
