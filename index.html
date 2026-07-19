@@ -1,83 +1,48 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>Vocabulary Quiz</title>
 
 <style>
-
 body{
     font-family:Arial,sans-serif;
     max-width:900px;
     margin:40px auto;
     padding:20px;
 }
-
-h1{
-    text-align:center;
-}
-
-select{
-    padding:10px;
-    font-size:18px;
-    margin-bottom:15px;
-}
-
-button{
-    padding:12px 25px;
-    font-size:18px;
-    margin-top:10px;
-}
-
+h1{text-align:center}
 #question{
     font-size:32px;
     margin:30px 0;
 }
-
 input{
     width:100%;
     padding:15px;
     font-size:22px;
     box-sizing:border-box;
 }
-
+button{
+    padding:12px 25px;
+    font-size:18px;
+    margin-top:15px;
+}
 #result{
     margin-top:20px;
     min-height:70px;
     font-size:22px;
 }
-
 #score,#progress{
     margin-top:10px;
     font-size:18px;
 }
-
 </style>
-
 </head>
 
 <body>
 
-<h1>🌍 Vocabulary Quiz</h1>
-
-<select id="groupSelect">
-
-<option value="group1">Group 1</option>
-<option value="group2">Group 2</option>
-<option value="group3">Group 3</option>
-<option value="group4">Group 4</option>
-<option value="group5">Group 5</option>
-<option value="group6">Group 6</option>
-<option value="group7">Group 7</option>
-<option value="group8">Group 8</option>
-<option value="group9">Group 9</option>
-<option value="group10">Group 10</option>
-<option value="full">Full</option>
-
-</select>
+<h1>🌍 Environment Vocabulary Quiz</h1>
 
 <button id="modeBtn" onclick="toggleMode()">
 🎧 Listening Mode: OFF
@@ -102,14 +67,12 @@ Tiếp theo
 </button>
 
 <div id="result"></div>
-
 <div id="score"></div>
 
 <script>
 
-const groups={
-
-group1:[
+const groups = {
+    group1:[
         ["Analysis","Sự phân tích"],
         ["Approach","Phương pháp, tiếp cận"],
         ["Area","Phạm vi hiểu biết, chuyên môn"],
@@ -699,35 +662,25 @@ group1:[
         ["Straightforward","Đơn giản"],
         ["Undergo","Trải qua"],
         ["Whereby","Theo đó"]
+    ],
+    full:[
+        ...groups.group1,
+        ...groups.group2,
+        ...groups.group3,
+        ...groups.group4,
+        ...groups.group5,
+        ...groups.group6,
+        ...groups.group7,
+        ...groups.group8,
+        ...groups.group9,
+        ...groups.group10
     ]
-};
-
-let words=[];
-
-function loadWords(){
-
-    if(groupSelect.value==="full"){
-
-        words=[];
-
-        for(let i=1;i<=10;i++){
-
-            words.push(...groups["group"+i]);
-
-        }
-
-    }else{
-
-        words=[...groups[groupSelect.value]];
-
-    }
-
 }
-let mainList=[];
+
+let mainList=[...Array(words.length).keys()];
 let blacklist=[];
 
 let current=-1;
-
 let score=0;
 let total=0;
 
@@ -736,59 +689,26 @@ let waitingNext=false;
 let listeningMode=false;
 
 function shuffle(arr){
-
     for(let i=arr.length-1;i>0;i--){
-
         let j=Math.floor(Math.random()*(i+1));
-
         [arr[i],arr[j]]=[arr[j],arr[i]];
-
     }
-
 }
 
-function resetQuiz(){
-
-    loadWords();
-
-    mainList=[...Array(words.length).keys()];
-
-    blacklist=[];
-
-    current=-1;
-
-    score=0;
-
-    total=0;
-
-    reviewMode=false;
-
-    waitingNext=false;
-
-    shuffle(mainList);
-
-    document.getElementById("answer").style.display="block";
-
-    nextQuestion();
-
-}
+shuffle(mainList);
 
 function speakWord(){
 
-    if(current===-1)return;
-
-    let utterance=new SpeechSynthesisUtterance(
+    let utterance=
+    new SpeechSynthesisUtterance(
         words[current][0]
     );
 
     utterance.lang="en-US";
-
     utterance.rate=0.9;
 
     speechSynthesis.cancel();
-
     speechSynthesis.speak(utterance);
-
 }
 
 function toggleMode(){
@@ -796,42 +716,27 @@ function toggleMode(){
     listeningMode=!listeningMode;
 
     document.getElementById("modeBtn").innerHTML=
-
     listeningMode
-
     ? "🎧 Listening Mode: ON"
-
     : "🎧 Listening Mode: OFF";
 
     nextQuestion();
-
 }
 
 function updateUI(){
 
     document.getElementById("score").innerHTML=
-
     `🏆 ${score}/${total}`;
 
     if(reviewMode){
-
         document.getElementById("progress").innerHTML=
-
         `📚 Blacklist còn ${blacklist.length} từ`;
-
-    }
-
-    else{
-
+    }else{
         document.getElementById("progress").innerHTML=
-
         `📖 Còn ${mainList.length} từ`;
-
     }
-
 }
 
-groupSelect.addEventListener("change",resetQuiz);
 function nextQuestion(){
 
     if(!reviewMode){
@@ -839,59 +744,41 @@ function nextQuestion(){
         if(mainList.length===0){
 
             if(blacklist.length===0){
-
                 finish();
-
                 return;
-
             }
 
             reviewMode=true;
-
         }
-
     }
 
     if(reviewMode){
 
         if(blacklist.length===0){
-
             finish();
-
             return;
-
         }
 
         current=blacklist[0];
 
-    }
-
-    else{
+    }else{
 
         current=mainList[0];
-
     }
 
     if(listeningMode){
 
         document.getElementById("question").innerHTML=
-
         "🎧 Nhấn TAB để nghe";
 
-    }
-
-    else{
+    }else{
 
         document.getElementById("question").innerHTML=
-
         "👉 "+words[current][1];
-
     }
 
     document.getElementById("answer").value="";
-
     document.getElementById("result").innerHTML="";
-
     document.getElementById("nextBtn").style.display="none";
 
     waitingNext=false;
@@ -899,23 +786,16 @@ function nextQuestion(){
     updateUI();
 
     document.getElementById("answer").focus();
-
 }
 
 function finish(){
 
     document.getElementById("question").innerHTML=
-
     "🎉 Hoàn thành!";
 
     document.getElementById("answer").style.display="none";
 
     document.getElementById("nextBtn").style.display="none";
-
-    document.getElementById("result").innerHTML=
-
-    `🏆 Điểm cuối: ${score}/${total}`;
-
 }
 
 function checkAnswer(){
@@ -923,13 +803,9 @@ function checkAnswer(){
     if(waitingNext)return;
 
     let user=document
-
     .getElementById("answer")
-
     .value
-
     .trim()
-
     .toLowerCase();
 
     if(!user)return;
@@ -937,9 +813,7 @@ function checkAnswer(){
     total++;
 
     let correct=
-
     words[current][0]
-
     .toLowerCase();
 
     if(user===correct){
@@ -947,59 +821,38 @@ function checkAnswer(){
         score++;
 
         if(reviewMode){
-
             blacklist.shift();
-
-        }
-
-        else{
-
+        }else{
             mainList.shift();
-
         }
 
         document.getElementById("result").innerHTML=
-
         "✅ Chính xác";
 
         updateUI();
 
         setTimeout(nextQuestion,300);
 
-    }
-
-    else{
+    }else{
 
         if(!reviewMode &&
-
         !blacklist.includes(current)){
-
             blacklist.push(current);
-
         }
 
         waitingNext=true;
 
         document.getElementById("result").innerHTML=
-
         listeningMode
-
         ? `❌ Sai<br><br>
-
         Đáp án: <b>${words[current][0]}</b><br>
-
         Nghĩa: <b>${words[current][1]}</b>`
-
         : `❌ Sai<br><br>
-
         Đáp án: <b>${words[current][0]}</b>`;
 
         document.getElementById("nextBtn").style.display=
-
         "inline-block";
-
     }
-
 }
 
 function nextAfterWrong(){
@@ -1007,35 +860,38 @@ function nextAfterWrong(){
     if(reviewMode){
 
         blacklist.push(
-
             blacklist.shift()
-
         );
 
-    }
-
-    else{
+    }else{
 
         mainList.push(
-
             mainList.shift()
-
         );
-
     }
 
     waitingNext=false;
 
     nextQuestion();
-
 }
+
 document
 .getElementById("answer")
 .addEventListener("keydown",function(e){
 
     if(e.key==="Enter"){
 
-        checkAnswer();
+        if(waitingNext){
+
+            nextAfterWrong();
+
+        }
+
+        else{
+
+            checkAnswer();
+
+        }
 
     }
 
@@ -1044,16 +900,20 @@ document
         e.preventDefault();
 
         if(listeningMode){
-
             speakWord();
-
         }
+    }
+    if(e.key==="Control" && waitingNext){
+
+        e.preventDefault();
+
+        nextAfterWrong();
 
     }
 
 });
 
-resetQuiz();
+nextQuestion();
 
 </script>
 
